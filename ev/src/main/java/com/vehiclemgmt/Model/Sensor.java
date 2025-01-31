@@ -6,12 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Component
 @Entity(name = "sensors_table")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Sensor {
+public class Sensor implements Serializable {
     @Id
     private int sensor_id;
     @OneToOne

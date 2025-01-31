@@ -5,10 +5,8 @@ import com.vehiclemgmt.Model.Sensor;
 import com.vehiclemgmt.Model.Vehicles;
 import com.vehiclemgmt.Service.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,9 +15,14 @@ public class SensorController {
     @Autowired
     SensorService sensorService;
 
+    @GetMapping("/sensor/{id}")
+    public Sensor getSensor(@PathVariable int id) {
+        return sensorService.getSensor(id);
+    }
+
     @GetMapping("/getSensors")
     public List<Sensor> getSensors() {
-        return sensorService.getSensor();
+        return sensorService.getSensors();
     }
 
     @GetMapping("/sensor_anomalies")
@@ -31,6 +34,12 @@ public class SensorController {
     public String insertSensor(@RequestBody SensorDTO sensorDTO) {
         sensorService.insertSensor(sensorDTO);
         return "Sensors added successfully!!";
+    }
+
+    @DeleteMapping("/deleteSensor/{id}")
+    public String deleteSensor(@PathVariable int id) {
+        sensorService.deleteSensor(id);
+        return "Deleted Successfully!!";
     }
 
     @PostMapping("/insertSensors")

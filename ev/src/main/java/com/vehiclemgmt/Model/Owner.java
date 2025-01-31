@@ -8,12 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "owners_table")
 @Component
-public class Owner {
+public class Owner implements Serializable {
     @Id
     private int owner_id;
     @Column

@@ -6,6 +6,8 @@ import com.vehiclemgmt.Model.Vehicles;
 import com.vehiclemgmt.Repository.SensorRepo;
 import com.vehiclemgmt.Repository.VehicleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,7 +21,14 @@ public class SensorService {
     @Autowired
     VehicleRepo vehicleRepo;
 
-    public List<Sensor> getSensor() {
+    @Cacheable(value = "sensors", key = "#id")
+    public Sensor getSensor(int id) {
+        return sensorRepo.findById(id).orElseThrow(
+                () -> new RuntimeException("Sensor id mismatched!")
+        );
+    }
+
+    public List<Sensor> getSensors() {
         return sensorRepo.findAll();
     }
 
@@ -42,6 +51,27 @@ public class SensorService {
         for (SensorDTO sensor : sensorDTO) {
             insertSensor(sensor);
         }
+    }
+
+    public void updateSensor(SensorDTO sensorDTO) {
+        Sensor sensor = sensorRepo.findById(sensorDTO.getSensor_id())
+                .orElseThrow(() -> new RuntimeException("Sensor not found!!"));
+        Vehicles vehicle = vehicleRepo.findById(sensorDTO.getVehicle_id())
+                .orElseThrow(() -> new RuntimeException("Vehicle not found!!"));
+
+        sensor.setSensor_id(sensorDTO.getSensor_id());
+        sensor.setSensor_type(sensorDTO.getSensor_type());
+        sensor.setVehicle(vehicle);
+        sensor.setSensor_reading(sensorDTO.getSensor_reading());
+        sensor.setTimestamp(sensorDTO.getTimestamp());
+
+        sensorRepo.save(sensor);
+    }
+
+    public void deleteSensor(int id) {
+        Sensor sensor = sensorRepo.findById(id).orElseThrow(
+                () -> new RuntimeException("Id not found!!"));
+        sensorRepo.delete(sensor);
     }
 
     public List<Vehicles> detectAnomalies() {

@@ -56,13 +56,6 @@ public class MaintenanceService {
     }
 
     public List<Maintenance> getHistory(int id) {
-        List<Maintenance> maintenanceHistory = new ArrayList<Maintenance>();
-        List<Maintenance> allMaintenances = maintenanceRepo.findAll();
-        for (Maintenance maintenance : allMaintenances) {
-            if (maintenance.getVehicles().getVehicle_id() == id) {
-                maintenanceHistory.add(maintenance);
-            }
-        }
-        return maintenanceHistory;
+        return maintenanceRepo.findAllByVehiclesVehicleId(id);
     }
 }

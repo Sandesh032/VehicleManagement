@@ -6,14 +6,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Component
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "vehicles_table")
-public class Vehicles {
+public class Vehicles implements Serializable {
     @Id
-    private int vehicle_id;
+    @Column(name = "vehicle_id")
+    private int vehicleId;
     @Column
     private String make;
     @Column

@@ -11,7 +11,12 @@ import java.util.List;
 public class OwnerService {
     @Autowired
     OwnerRepo ownerRepo;
+
     public void insertOwners(List<Owner> owner) {
         ownerRepo.saveAll(owner);
+    }
+
+    public List<Owner> getOwners() {
+        return ownerRepo.findAll();
     }
 }
